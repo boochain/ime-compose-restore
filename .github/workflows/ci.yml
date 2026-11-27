@@ -69,9 +69,11 @@ jobs:
         run: |
           set -euo pipefail
           tag="${GITHUB_REF_NAME}"
+          ls -la
           notes="Windows 单文件可执行包。解压后运行 ImeComposeRestore.exe。默认快捷键 Ctrl+Alt+R。
 
           使用说明见压缩包内 README.md 与 docs。真实输入法效果请按 windows-verification.md 在 Windows 上自测；CI 只保证构建与单元测试通过。"
           gh release create "$tag" ImeComposeRestore-win-x64.zip \
+            --repo "${GITHUB_REPOSITORY}" \
             --title "IME 组字恢复 $tag" \
             --notes "$notes"
