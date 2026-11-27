@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>ImeComposeRestore</RootNamespace>
+    <AssemblyName>ImeComposeRestore.Core</AssemblyName>
+    <Version>0.1.0</Version>
+    <Authors>boochain</Authors>
+    <Description>Identify leftover Chinese IME pinyin strings and plan composition restore.</Description>
+    <LangVersion>12</LangVersion>
+  </PropertyGroup>
+
+</Project>

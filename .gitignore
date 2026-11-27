@@ -1,0 +1,51 @@
+## .NET / Visual Studio
+bin/
+obj/
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+*.user
+*.userosscache
+*.suo
+*.userprefs
+.vs/
+*.ncb
+*.sdf
+*.opensdf
+*.VC.db
+*.VC.VC.opendb
+artifacts/
+publish/
+*.Publish.xml
+
+## NuGet
+*.nupkg
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+project.lock.json
+project.fragment.lock.json
+
+## OS
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+## Rider / VS Code
+.idea/
+*.sln.iml
+.vscode/*
+!.vscode/extensions.json
+
+## Test
+TestResults/
+[Tt]est[Rr]esult*/
+*.trx
+
+## Others
+*.cache
+app.publish/

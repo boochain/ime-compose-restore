@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <AssemblyName>ImeComposeRestore</AssemblyName>
+    <RootNamespace>ImeComposeRestore.App</RootNamespace>
+    <Version>0.1.0</Version>
+    <Authors>boochain</Authors>
+    <Product>IME 组字恢复</Product>
+    <Description>IME 组字恢复 — 失焦后根据残留拼音重建输入法组字状态</Description>
+    <PlatformTarget>x64</PlatformTarget>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
+    <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ImeComposeRestore.Core\ImeComposeRestore.Core.csproj" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <!-- TextPattern / AutomationElement live in the Windows Desktop targeting pack. -->
+    <Reference Include="UIAutomationClient" />
+    <Reference Include="UIAutomationTypes" />
+  </ItemGroup>
+
+</Project>
+

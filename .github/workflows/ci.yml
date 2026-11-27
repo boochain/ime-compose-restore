@@ -1,0 +1,77 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Test
+        run: dotnet test ImeComposeRestore.sln -c Release --nologo --logger "trx;LogFileName=test-results.trx"
+
+      - name: Publish win-x64 single-file
+        run: >
+          dotnet publish src/ImeComposeRestore.App/ImeComposeRestore.App.csproj
+          -c Release
+          -r win-x64
+          --self-contained true
+          -p:PublishSingleFile=true
+          -p:IncludeNativeLibrariesForSelfExtract=true
+          -p:EnableCompressionInSingleFile=true
+          -p:DebugType=None
+          -p:DebugSymbols=false
+          -o publish
+
+      - name: Pack zip
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force package | Out-Null
+          Copy-Item publish/ImeComposeRestore.exe package/
+          Copy-Item README.md, LICENSE, CHANGELOG.md package/
+          Copy-Item docs/ime-focus-loss.md, docs/windows-verification.md package/
+          Copy-Item docs/使用说明.txt package/ -ErrorAction SilentlyContinue
+          Compress-Archive -Path package/* -DestinationPath ImeComposeRestore-win-x64.zip -Force
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ImeComposeRestore-win-x64
+          path: ImeComposeRestore-win-x64.zip
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ImeComposeRestore-win-x64
+
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          tag="${GITHUB_REF_NAME}"
+          notes="Windows 单文件可执行包。解压后运行 ImeComposeRestore.exe。默认快捷键 Ctrl+Alt+R。
+
+          使用说明见压缩包内 README.md 与 docs。真实输入法效果请按 windows-verification.md 在 Windows 上自测；CI 只保证构建与单元测试通过。"
+          gh release create "$tag" ImeComposeRestore-win-x64.zip \
+            --title "IME 组字恢复 $tag" \
+            --notes "$notes"
