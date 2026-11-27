@@ -44,7 +44,7 @@ jobs:
           Copy-Item publish/ImeComposeRestore.exe package/
           Copy-Item README.md, LICENSE, CHANGELOG.md package/
           Copy-Item docs/ime-focus-loss.md, docs/windows-verification.md package/
-          Copy-Item docs/使用说明.txt package/ -ErrorAction SilentlyContinue
+          Copy-Item docs/USAGE.txt package/
           Compress-Archive -Path package/* -DestinationPath ImeComposeRestore-win-x64.zip -Force
 
       - name: Upload artifact
