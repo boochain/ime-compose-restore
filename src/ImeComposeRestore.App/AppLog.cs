@@ -11,11 +11,11 @@ internal static class AppLog
             return;
         try
         {
-            Directory.CreateDirectory(AppConfig.ConfigDirectory);
+            System.IO.Directory.CreateDirectory(AppConfig.ConfigDirectory);
             var line = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") + "  " + message + Environment.NewLine;
             lock (Gate)
             {
-                File.AppendAllText(AppConfig.LogPath, line);
+                System.IO.File.AppendAllText(AppConfig.LogPath, line);
             }
         }
         catch

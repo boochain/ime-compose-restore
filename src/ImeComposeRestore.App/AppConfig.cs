@@ -18,23 +18,23 @@ public sealed class AppConfig
     public bool LogEnabled { get; set; } = true;
 
     [JsonIgnore]
-    public static string ConfigDirectory { get; } = Path.Combine(
+    public static string ConfigDirectory { get; } = System.IO.Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
         "ImeComposeRestore");
 
     [JsonIgnore]
-    public static string ConfigPath => Path.Combine(ConfigDirectory, "config.json");
+    public static string ConfigPath => System.IO.Path.Combine(ConfigDirectory, "config.json");
 
     [JsonIgnore]
-    public static string LogPath => Path.Combine(ConfigDirectory, "restore.log");
+    public static string LogPath => System.IO.Path.Combine(ConfigDirectory, "restore.log");
 
     public static AppConfig Load()
     {
         try
         {
-            if (File.Exists(ConfigPath))
+            if (System.IO.File.Exists(ConfigPath))
             {
-                var json = File.ReadAllText(ConfigPath);
+                var json = System.IO.File.ReadAllText(ConfigPath);
                 var loaded = JsonSerializer.Deserialize(json, AppConfigJsonContext.Default.AppConfig);
                 if (loaded is not null)
                     return loaded;
@@ -52,9 +52,9 @@ public sealed class AppConfig
 
     public void Save()
     {
-        Directory.CreateDirectory(ConfigDirectory);
+        System.IO.Directory.CreateDirectory(ConfigDirectory);
         var json = JsonSerializer.Serialize(this, AppConfigJsonContext.Default.AppConfig);
-        File.WriteAllText(ConfigPath, json);
+        System.IO.File.WriteAllText(ConfigPath, json);
         ApplyStartup();
     }
 

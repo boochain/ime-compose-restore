@@ -164,7 +164,7 @@ internal static class CaretTextReader
             return false;
 
         var range = line.Clone();
-        range.Collapse(true);
+        range.MoveEndpointByRange(TextPatternRangeEndpoint.End, range, TextPatternRangeEndpoint.Start);
         if (start > 0 && range.Move(TextUnit.Character, start) != start)
         {
             // Some providers cannot move by character accurately; fall through.
@@ -180,18 +180,10 @@ internal static class CaretTextReader
         }
 
         range.Select();
-        try
-        {
-            range.SetText("");
-            return true;
-        }
-        catch (InvalidOperationException)
-        {
-            // Read-only range; try backspace on the selection instead.
-            NativeMethods.SendVirtualKey(NativeMethods.VK_BACK, keyUp: false);
-            NativeMethods.SendVirtualKey(NativeMethods.VK_BACK, keyUp: true);
-            return true;
-        }
+        NativeMethods.ReleaseModifierKeys();
+        NativeMethods.SendVirtualKey(NativeMethods.VK_BACK, keyUp: false);
+        NativeMethods.SendVirtualKey(NativeMethods.VK_BACK, keyUp: true);
+        return true;
     }
 
     private static TextPatternRange? SliceRange(TextPatternRange line, string lineText, int start, int length)
